@@ -473,6 +473,9 @@ footer .right{font-size:.74rem;color:var(--dim);text-align:right}
       <label for="message">About your lawn</label>
       <textarea id="message" name="message" placeholder="Rough size, how long since the last cut, and anything we should know about access." required></textarea>
 
+      <label for="photos">Photos <span style="font-weight:400;opacity:0.6">(optional — helps Cody give an accurate quote)</span></label>
+      <input id="photos" name="photos" type="file" accept="image/*" multiple style="color:var(--grey);padding:0.5rem 0;cursor:pointer;">
+
       <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
       <input type="hidden" name="_subject" value="New quote request — codycuts.co.uk">
       <input type="hidden" name="_template" value="table">
@@ -520,7 +523,7 @@ footer .right{font-size:.74rem;color:var(--dim);text-align:right}
    Do not leave the plain-email version live — it exposes the address to
    scrapers. Step 4 is the whole point.
    ========================================================================== */
-const FORM_ENDPOINT = "https://formsubmit.co/ajax/michaelgoggs%40googlemail.com";
+const FORM_ENDPOINT = "https://usebasin.com/f/df702983b89e";
 
 document.getElementById('yr').textContent = new Date().getFullYear();
 
@@ -584,17 +587,12 @@ form.addEventListener('submit', async (e) => {
   }
   if (form._honey.value) return; /* bot */
 
-  if (FORM_ENDPOINT.includes('REPLACE_WITH_YOUR_TOKEN')) {
-    msg.textContent = 'Form not yet connected — see the setup note in the page source.';
-    msg.className = 'msg err'; return;
-  }
-
   btn.disabled = true; btn.textContent = 'Sending…';
   try {
     const res = await fetch(FORM_ENDPOINT, {
       method: 'POST',
-      headers: {'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify(Object.fromEntries(new FormData(form)))
+      headers: {'Accept':'application/json'},
+      body: new FormData(form)
     });
     if (!res.ok) throw new Error('bad response');
     form.reset();
